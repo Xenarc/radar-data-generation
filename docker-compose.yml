@@ -1,0 +1,10 @@
+services:
+  kafka:
+    image: apache/kafka
+    ports:
+      - "9092:9092"
+  
+  # grafana:
+  #   image: grafana/grafana
+  #   ports:
+  #     - "3000:3000"
