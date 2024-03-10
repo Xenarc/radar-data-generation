@@ -24,7 +24,7 @@ class SingleModeRadar(IRadar):
     self.running = True
     self.kafka_server = kafka_server
     self.topic= topic
-    self.producer = KafkaProducer(bootstrap_servers=self.kafka_server)
+    self.producer = KafkaProducer(bootstrap_servers=self.kafka_server, linger_ms=1)
     self.logger = logging.getLogger(f"{__name__}:{self.name}")
   
   def run(self):
@@ -43,7 +43,7 @@ class SingleModeRadar(IRadar):
             "amplitude": self.amplitude
           })
           previous_pri_time_us += self.pri_us  # increment next execution time by PRI in seconds
-        time.sleep((previous_pri_time_us/5)*1e-6)  # sleep until next execution time
+        time.sleep(100*1e-6) # sleep until next execution time
     except Exception as e:
       print(f"An error occurred in {__class__.__name__}")
       self.logger.error(traceback.format_exc())
@@ -52,7 +52,7 @@ class SingleModeRadar(IRadar):
     self.logger.info("Radar stopped.")
   
   def publish_pdw(self, pdw):
-    self.producer.send(self.topic, json.dumps(pdw).encode())
+    self.producer.send(self.topic, json.dumps(pdw).encode(), timestamp_ms=int(pdw['tot']/1000))
     self.logger.debug(f"Published PDW to Kafka: {self.topic}")
     self.producer.flush()
   

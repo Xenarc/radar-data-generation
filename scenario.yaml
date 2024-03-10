@@ -10,62 +10,62 @@ radar1:
     kafka_server: localhost:9092
     topic: pdw
 
-# radar2:
-#   module: single_mode_radar
-#   class: SingleModeRadar
-#   parameters:
-#     name: 'radar2'
-#     pri_us: 4500
-#     pulse_duration_us: 4
-#     rf_mhz: 120
-#     amplitude: 0.6
-#     kafka_server: localhost:9092
-#     topic: pdw
+radar2:
+  module: single_mode_radar
+  class: SingleModeRadar
+  parameters:
+    name: 'radar2'
+    pri_us: 4500
+    pulse_duration_us: 4
+    rf_mhz: 120
+    amplitude: 0.6
+    kafka_server: localhost:9092
+    topic: pdw
 
-# radar3:
-#   module: single_mode_radar
-#   class: SingleModeRadar
-#   parameters:
-#     name: 'radar3'
-#     pri_us: 3000
-#     pulse_duration_us: 7
-#     rf_mhz: 112
-#     amplitude: 1.0
-#     kafka_server: localhost:9092
-#     topic: pdw
+radar3:
+  module: single_mode_radar
+  class: SingleModeRadar
+  parameters:
+    name: 'radar3'
+    pri_us: 3000
+    pulse_duration_us: 7
+    rf_mhz: 112
+    amplitude: 1.0
+    kafka_server: localhost:9092
+    topic: pdw
 
-# radar4:
-#   module: single_mode_radar
-#   class: SingleModeRadar
-#   parameters:
-#     name: 'radar4'
-#     pri_us: 1050
-#     pulse_duration_us: 6
-#     rf_mhz: 100
-#     amplitude: 0.2
-#     kafka_server: localhost:9092
-#     topic: pdw
+radar4:
+  module: single_mode_radar
+  class: SingleModeRadar
+  parameters:
+    name: 'radar4'
+    pri_us: 1050
+    pulse_duration_us: 6
+    rf_mhz: 100
+    amplitude: 0.2
+    kafka_server: localhost:9092
+    topic: pdw
 
-# radar5:
-#   module: single_mode_radar
-#   class: SingleModeRadar
-#   parameters:
-#     name: 'radar5'
-#     pri_us: 4550
-#     pulse_duration_us: 4
-#     rf_mhz: 120
-#     amplitude: 0.6
-#     kafka_server: localhost:9092
-#     topic: pdw
+radar5:
+  module: single_mode_radar
+  class: SingleModeRadar
+  parameters:
+    name: 'radar5'
+    pri_us: 4550
+    pulse_duration_us: 4
+    rf_mhz: 120
+    amplitude: 0.6
+    kafka_server: localhost:9092
+    topic: pdw
 
-# radar6:
-#   module: single_mode_radar
-#   class: SingleModeRadar
-#   parameters:
-#     name: 'radar6'
-#     pri_us: 3050
-#     pulse_duration_us: 52
-#     rf_mhz: 112
-#     amplitude: 1.0
-#     kafka_server: localhost:9092
-#     topic: pdw
+radar6:
+  module: single_mode_radar
+  class: SingleModeRadar
+  parameters:
+    name: 'radar6'
+    pri_us: 995
+    pulse_duration_us: 5.2
+    rf_mhz: 112
+    amplitude: 1.0
+    kafka_server: localhost:9092
+    topic: pdw
