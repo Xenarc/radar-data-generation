@@ -3,6 +3,8 @@ services:
     image: apache/kafka
     ports:
       - "9092:9092"
+  sig-gen:
+    build: .
   
   # grafana:
   #   image: grafana/grafana

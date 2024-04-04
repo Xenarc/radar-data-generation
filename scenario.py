@@ -48,8 +48,8 @@ class Scenario:
         self.logger.info("All radars invoked")
         
         # Start receiver
-        # self.receiver.receive()
-        executor.submit(self.receiver.receive)
+        self.receiver.receive()
+        # executor.submit(self.receiver.receive)
         
         self.logger.info("Scenario fully running...")
         while self.is_running:
