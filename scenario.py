@@ -11,19 +11,21 @@ from radar import IRadar
 from receiver import Receiver
 
 class Scenario:
-  def __init__(self, radars):
+  def __init__(self, radars: [IRadar], time_dialation: float):
     self.radars: Dict[str, IRadar] = radars
     self.logger = logging.getLogger(__name__)
-    self.receiver = Receiver("localhost:9092", "pdw")
+    self.receiver = Receiver(time_dialation, "localhost:9092", "pdw")
     self.is_running = True
-    signal.signal(signal.SIGINT, self.stop)   
+    signal.signal(signal.SIGINT, self.stop)
   
   @staticmethod
   def load_scenario_from_yaml(file_path: str):
     logger = logging.getLogger(__class__.__name__)
     logger.info(f"Creating Scenario from {file_path}")
     with open(file_path, 'r') as file:
-      scenario_data = yaml.safe_load(file)
+      loaded_yaml = yaml.safe_load(file)
+      scenario_data = loaded_yaml['radars']
+      time_dialation = loaded_yaml['time_dialation']
     
     radars = {}
     for radar_name, radar_info in scenario_data.items():
@@ -33,10 +35,10 @@ class Scenario:
       
       module = importlib.import_module(module_name)
       radar_class = getattr(module, class_name)
-      radar_instance = radar_class(**parameters)
+      radar_instance = radar_class(time_dialation, **parameters)
       radars[radar_name] = radar_instance
     logger.info(f"Created Scenario with {len(radars.values())} radars")
-    return Scenario(radars)
+    return Scenario(radars, time_dialation)
   
   def run(self):
     self.logger.info("Running Scenario")

@@ -13,7 +13,8 @@ import heapq
 # matplotlib_use('Agg')
 
 class Receiver:
-  def __init__(self, kafka_servers: str, kafka_topic: str):
+  def __init__(self, time_dialation, kafka_servers: str, kafka_topic: str):
+    self.time_dialation = time_dialation
     self.logger = logging.getLogger(__name__)
     self.kafka_servers = kafka_servers
     self.kafka_topic = kafka_topic
@@ -23,10 +24,10 @@ class Receiver:
     )
     self.consumer.subscribe(topics=[self.kafka_topic])
     
-    self.sample_rate = int(10e6) # 100Ms/s
-    self.late_pdw_allowance = 3.0 # A 3 second difference from oldest to newest PDW (min).
-    self.accumulator_size = int(0.15*self.sample_rate) # 50 milliseconds' worth of samples
-    max_pri_isolation_us = 100_000
+    self.sample_rate = int(10e6/time_dialation) # 100Ms/s
+    self.late_pdw_allowance = 2.0*time_dialation # A 2 second difference from oldest to newest PDW (min).
+    self.accumulator_size = int(0.15*self.sample_rate*time_dialation) # 50 milliseconds' worth of samples
+    max_pri_isolation_us = 100_000*time_dialation
     self.min_buffer_size = self.accumulator_size - max_pri_isolation_us*1e-6*self.sample_rate # samples
     
     self.fig, self.ax = plt.subplots()
@@ -63,8 +64,7 @@ class Receiver:
             pulse = pdw_to_pulse(pdw, self.sample_rate)
             tof_offset_samples = toa_offset_samples + len(pulse)
             accumulator[toa_offset_samples:tof_offset_samples] += pulse
-            
-            # check and write if it makes sense to do so
+             
             if(toa_offset_samples > self.min_buffer_size):
               num_samples_to_emit = toa_offset_samples
               time_delta_of_emission = (num_samples_to_emit/self.sample_rate)*1e6
@@ -78,7 +78,7 @@ class Receiver:
               self.logger.info(f'{(now_us - acc_start_us)*1e-6}s late')
               acc_start_us += time_delta_of_emission
 
-    except Exception:
+    except Exception:  
       print(f"An error occurred in {__class__.__name__}")
       self.logger.error(traceback.format_exc())
     
@@ -86,7 +86,7 @@ class Receiver:
     self.logger.info("Receiver stopped.")
 
   def write_samples(self, samples, timestamp, datafile):
-    # np.savetxt(datafile, samples, delimiter=',')
+    np.savetxt(datafile, samples, delimiter=',')
     # np.save(datafile, samples)
     return
     self.ax.clear()

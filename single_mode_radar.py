@@ -9,6 +9,7 @@ import time
 
 class SingleModeRadar(IRadar):
   def __init__(self,
+                time_dialation,
                 name,
                 pri_us,
                 pulse_duration_us,
@@ -16,10 +17,11 @@ class SingleModeRadar(IRadar):
                 amplitude,
                 kafka_server,
                 topic):
+    self.time_dialation = time_dialation
     self.name = name
-    self.pri_us = float(pri_us)
-    self.pulse_duration_us = float(pulse_duration_us)
-    self.rf_mhz = float(rf_mhz)
+    self.pri_us = float(pri_us)*time_dialation
+    self.pulse_duration_us = float(pulse_duration_us)*time_dialation
+    self.rf_mhz = float(rf_mhz)/time_dialation
     self.amplitude = float(amplitude)
     self.running = True
     self.kafka_server = kafka_server
@@ -31,13 +33,13 @@ class SingleModeRadar(IRadar):
     try:
       self.logger.info("Starting radar")
       self.running = True
-      previous_pri_time_us = time.time_ns()/1000 + randint(0, self.pri_us)  # calculate next execution time
+      previous_pri_time_us = time.time_ns()/1000 + randint(0, int(self.pri_us))  # calculate next execution time
       while self.running:
         while self.running and previous_pri_time_us <= previous_pri_time_us + self.pri_us:
           self.publish_pdw({
             "tot": previous_pri_time_us,
             "name": self.name,
-            "rf": self.rf_mhz + np.random.normal(0, 0.05),  # 50kHz RF drift
+            "rf": self.rf_mhz,
             "pri": self.pri_us,
             "pd": self.pulse_duration_us,
             "amplitude": self.amplitude
